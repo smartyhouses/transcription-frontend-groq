@@ -1,101 +1,153 @@
-import Image from "next/image";
+"use client";
+
+import { useCallback, useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  LiveKitRoom,
+  useVoiceAssistant,
+  RoomAudioRenderer,
+  AgentState,
+  useMaybeRoomContext,
+} from "@livekit/components-react";
+import { MediaDeviceFailure, Participant, RoomEvent, TrackPublication, TranscriptionSegment } from "livekit-client";
+import type { ConnectionDetails } from "./api/token/route";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [connectionDetails, updateConnectionDetails] = useState<ConnectionDetails | null>(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+  const onConnectButtonClicked = useCallback(async () => {
+    const url = new URL("/api/token", window.location.origin);
+    const response = await fetch(url);
+    const connectionDetailsData = await response.json();
+    updateConnectionDetails(connectionDetailsData);
+  }, []);
+
+  return (
+    <div className="grid grid-rows-[20px_1fr_20px] min-h-screen p-8 pb-20 gap-16 sm:p-20">
+      <header className="flex items-center justify-between">
+        <img src="/images/groq-logomark.svg" alt="Groq logo" className="h-16" />
+        <p>
+          Built with <img src="/images/livekit-logomark.svg" alt="LiveKit logo" className="h-6" />
+        </p>
+      </header>
+      <main className="flex flex-col gap-8 row-start-2 items-stretch">
+        <LiveKitRoom
+          token={connectionDetails?.participantToken}
+          serverUrl={connectionDetails?.serverUrl}
+          connect={connectionDetails !== undefined}
+          audio={true}
+          video={false}
+          onMediaDeviceFailure={onDeviceFailure}
+          onDisconnected={() => updateConnectionDetails(null)}
+          className="grow"
+        >
+          <RoomAudioRenderer />
+          <Typewriter typingSpeed={40} onConnectButtonClicked={onConnectButtonClicked} />
+        </LiveKitRoom>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
       </footer>
     </div>
   );
 }
+
+function useTranscriber() {
+  const { state } = useVoiceAssistant();
+  const room = useMaybeRoomContext();
+  const [transcriptions, setTranscriptions] = useState<{ [id: string]: TranscriptionSegment }>({});
+
+  useEffect(() => {
+    if (!room) {
+      return;
+    }
+
+    const updateTranscriptions = (
+      segments: TranscriptionSegment[],
+      _participant?: Participant,
+      _publication?: TrackPublication,
+    ) => {
+      setTranscriptions((prev) => {
+        const newTranscriptions = { ...prev };
+        for (const segment of segments) {
+          newTranscriptions[segment.id] = segment;
+        }
+        return newTranscriptions;
+      });
+    };
+
+    room.on(RoomEvent.TranscriptionReceived, updateTranscriptions);
+    return () => {
+      room.off(RoomEvent.TranscriptionReceived, updateTranscriptions);
+    };
+  }, [room]);
+
+  return { state, transcriptions };
+}
+
+interface TypewriterProps {
+  typingSpeed?: number;
+  onConnectButtonClicked: () => void;
+}
+
+function Typewriter({ onConnectButtonClicked, typingSpeed = 50 }: TypewriterProps) {
+  const { state, transcriptions } = useTranscriber();
+  const [displayedText, setDisplayedText] = useState<string>("");
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+
+  const text = Object.values(transcriptions).map((t) => t.text).join("\n");
+
+  useEffect(() => {
+    if (currentIndex < text.length) {
+      const timeout = setTimeout(() => {
+        setDisplayedText((prev) => prev + text[currentIndex]);
+        setCurrentIndex((prev) => prev + 1);
+      }, typingSpeed);
+      return () => clearTimeout(timeout);
+    }
+  }, [currentIndex, text, typingSpeed]);
+
+  return (
+    <p className="text-lg font-mono">
+      <motion.span
+        style={{ whiteSpace: "pre" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.2 }}
+      >
+        {displayedText}
+      </motion.span>
+      <AnimatePresence>
+        {state === "disconnected" && (
+          <motion.button
+            initial={{ scale: 1, x: 0 }}
+            whileTap={{ scale: 0.95 }}
+            exit={{ width: 0, height: "2ch" }}
+            transition={{ duration: 0.2 }}
+            className={`absolute text-clip whitespace-nowrap uppercase font-mono font-bold px-4 py-2 bg-white text-[var(--background)] rounded-none`}
+            onClick={() => onConnectButtonClicked()}
+          >
+            Begin transcription
+          </motion.button>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {state !== "disconnected" && (
+          <motion.span
+            animate={{ opacity: [1, 0, 1] }}
+            transition={{ duration: 0.8, repeat: Infinity }}
+            children="█"
+          />
+        )}
+      </AnimatePresence>
+    </p>
+  );
+};
+
+
+function onDeviceFailure(error?: MediaDeviceFailure) {
+  console.error(error);
+  alert(
+    "Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab"
+  );
+}
+
