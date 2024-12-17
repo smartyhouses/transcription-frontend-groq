@@ -2,11 +2,11 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 import {
   LiveKitRoom,
   useVoiceAssistant,
   RoomAudioRenderer,
-  AgentState,
   useMaybeRoomContext,
 } from "@livekit/components-react";
 import { MediaDeviceFailure, Participant, RoomEvent, TrackPublication, TranscriptionSegment } from "livekit-client";
@@ -25,9 +25,9 @@ export default function Home() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <header className="flex items-center justify-between">
-        <img src="/images/groq-logomark.svg" alt="Groq logo" className="h-16" />
+        <Image width={122.667} height={64} src="/images/groq-logomark.svg" alt="Groq logo" className="h-16" />
         <p>
-          Built with <img src="/images/livekit-logomark.svg" alt="LiveKit logo" className="h-6" />
+          Built with <Image width={104.667} height={24} src="/images/livekit-logomark.svg" alt="LiveKit logo" className="h-6" />
         </p>
       </header>
       <main className="flex flex-col gap-8 row-start-2 items-stretch">
@@ -63,9 +63,12 @@ function useTranscriber() {
 
     const updateTranscriptions = (
       segments: TranscriptionSegment[],
-      _participant?: Participant,
-      _publication?: TrackPublication,
+      participant?: Participant,
+      publication?: TrackPublication,
     ) => {
+      void participant;
+      void publication;
+
       setTranscriptions((prev) => {
         const newTranscriptions = { ...prev };
         for (const segment of segments) {
@@ -135,8 +138,9 @@ function Typewriter({ onConnectButtonClicked, typingSpeed = 50 }: TypewriterProp
           <motion.span
             animate={{ opacity: [1, 0, 1] }}
             transition={{ duration: 0.8, repeat: Infinity }}
-            children="█"
-          />
+          >
+            {"█"}
+          </motion.span>
         )}
       </AnimatePresence>
     </p>
