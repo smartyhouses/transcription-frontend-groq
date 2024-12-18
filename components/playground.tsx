@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import {
   useConnectionState,
   useLocalParticipant,
@@ -23,15 +23,14 @@ export interface PlaygroundProps {
 
 export function Playground({ onConnect }: PlaygroundProps) {
   const { localParticipant } = useLocalParticipant();
-  const [transcribing, setTranscribing] = useState(false);
 
   const roomState = useConnectionState();
   const tracks = useTracks();
 
+
   useEffect(() => {
     if (roomState === ConnectionState.Connected) {
       localParticipant.setMicrophoneEnabled(true);
-      setTranscribing(true);
     }
   }, [localParticipant, roomState]);
 
@@ -50,6 +49,7 @@ export function Playground({ onConnect }: PlaygroundProps) {
 
   const audioTileContent = useMemo(() => {
     const isLoading = roomState === ConnectionState.Connecting;
+    const isActive = roomState !== ConnectionState.Disconnected;
 
     const conversationToolbar = (
       <div
@@ -60,18 +60,9 @@ export function Playground({ onConnect }: PlaygroundProps) {
       >
         <motion.div
           className="flex gap-3"
-          initial={{
-            opacity: 0,
-            y: 25,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          exit={{
-            opacity: 0,
-            y: 25,
-          }}
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 25 }}
           transition={{
             type: "spring",
             stiffness: 260,
@@ -113,18 +104,9 @@ export function Playground({ onConnect }: PlaygroundProps) {
       <div className="fixed bottom-2 md:bottom-auto md:absolute left-1/2 md:top-1/2 -translate-y-1/2 -translate-x-1/2 w-11/12 md:w-auto text-center">
         <motion.div
           className="flex gap-3"
-          initial={{
-            opacity: 0,
-            y: 50,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          exit={{
-            opacity: 0,
-            y: 50,
-          }}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 50 }}
           transition={{
             type: "spring",
             stiffness: 260,
@@ -134,9 +116,8 @@ export function Playground({ onConnect }: PlaygroundProps) {
           <Button
             state="primary"
             size="large"
-            className={`relative w-full text-base text-black ${
-              isLoading ? "pointer-events-none" : ""
-            }`}
+            className={`relative w-full text-base text-black ${isLoading ? "pointer-events-none" : ""
+              }`}
             onClick={() =>
               onConnect(roomState === ConnectionState.Disconnected)
             }
@@ -147,9 +128,8 @@ export function Playground({ onConnect }: PlaygroundProps) {
               Begin transcription
             </div>
             <div
-              className={`absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 ${
-                isLoading ? "opacity-100" : "opacity-0"
-              }`}
+              className={`absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 ${isLoading ? "opacity-100" : "opacity-0"
+                }`}
             >
               <LoadingSVG diameter={24} strokeWidth={4} />
             </div>
@@ -163,17 +143,17 @@ export function Playground({ onConnect }: PlaygroundProps) {
         <div className="h-full flex items-center"></div>
         <div className="min-h-20 w-full relative">
           <AnimatePresence>
-            {!transcribing ? startConversationButton : null}
+            {!isActive ? startConversationButton : null}
           </AnimatePresence>
           <AnimatePresence>
-            {transcribing ? conversationToolbar : null}
+            {isActive ? conversationToolbar : null}
           </AnimatePresence>
         </div>
       </div>
     );
 
     return visualizerContent;
-  }, [localMultibandVolume, roomState, transcribing, onConnect]);
+  }, [localMultibandVolume, roomState, onConnect]);
 
   return (
     <>

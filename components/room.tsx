@@ -5,7 +5,6 @@ import { Room, RoomEvent, Track, LocalAudioTrack } from "livekit-client";
 import {
   LiveKitRoom,
   RoomAudioRenderer,
-  StartAudio,
 } from "@livekit/components-react";
 
 import { Playground } from "@/components/playground";
@@ -63,7 +62,6 @@ export function RoomComponent() {
     >
       <Playground onConnect={handleConnect} />
       <RoomAudioRenderer />
-      <StartAudio label="Click to enable audio playback" />
     </LiveKitRoom>
   );
 }
