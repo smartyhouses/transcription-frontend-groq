@@ -12,7 +12,9 @@ type TokenGeneratorData = {
   connect: () => Promise<void>;
 };
 
-const ConnectionContext = createContext<TokenGeneratorData | undefined>(undefined);
+const ConnectionContext = createContext<TokenGeneratorData | undefined>(
+  undefined,
+);
 
 export const ConnectionProvider = ({
   children,
@@ -29,7 +31,9 @@ export const ConnectionProvider = ({
     if (!process.env.NEXT_PUBLIC_LIVEKIT_URL) {
       throw new Error("NEXT_PUBLIC_LIVEKIT_URL is not set");
     }
-    const { accessToken } = await fetch(TOKEN_ENDPOINT).then((res) => res.json());
+    const { accessToken } = await fetch(TOKEN_ENDPOINT).then((res) =>
+      res.json(),
+    );
     setConnectionDetails({
       wsUrl: process.env.NEXT_PUBLIC_LIVEKIT_URL,
       token: accessToken,

@@ -15,4 +15,3 @@ tasks:
     desc: "Bootstrap application for local development"
     cmds:
       - "pnpm install"
-

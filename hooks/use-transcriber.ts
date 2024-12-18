@@ -1,11 +1,21 @@
 import { useEffect, useState } from "react";
-import { useMaybeRoomContext, useVoiceAssistant } from "@livekit/components-react";
-import { Participant, RoomEvent, TrackPublication, TranscriptionSegment } from "livekit-client";
+import {
+  useMaybeRoomContext,
+  useVoiceAssistant,
+} from "@livekit/components-react";
+import {
+  Participant,
+  RoomEvent,
+  TrackPublication,
+  TranscriptionSegment,
+} from "livekit-client";
 
 export function useTranscriber() {
   const { state } = useVoiceAssistant();
   const room = useMaybeRoomContext();
-  const [transcriptions, setTranscriptions] = useState<{ [id: string]: TranscriptionSegment }>({});
+  const [transcriptions, setTranscriptions] = useState<{
+    [id: string]: TranscriptionSegment;
+  }>({});
 
   useEffect(() => {
     if (!room) {
