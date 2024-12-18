@@ -11,9 +11,6 @@ import { ConnectionState, LocalParticipant, Track } from "livekit-client";
 
 import { Button, LoadingSVG } from "@/components/ui/button";
 import { MicrophoneButton } from "@/components/microphone-button";
-// import { PlaygroundHeader } from "@/components/playground/PlaygroundHeader";
-// import { PlaygroundTile } from "@/components/playground/PlaygroundTile";
-// import { GroqAudioVisualizer } from "../visualization/GroqAudioVisualizer";
 import { useMultibandTrackVolume } from "@/hooks/use-track-volume";
 import { Typewriter } from "./typewriter";
 
@@ -115,9 +112,8 @@ export function Playground({ onConnect }: PlaygroundProps) {
           <Button
             state="primary"
             size="large"
-            className={`relative w-full text-base text-black ${
-              isLoading ? "pointer-events-none" : ""
-            }`}
+            className={`relative w-full text-base text-black ${isLoading ? "pointer-events-none" : ""
+              }`}
             onClick={() =>
               onConnect(roomState === ConnectionState.Disconnected)
             }
@@ -128,9 +124,8 @@ export function Playground({ onConnect }: PlaygroundProps) {
               Begin transcription
             </div>
             <div
-              className={`absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 ${
-                isLoading ? "opacity-100" : "opacity-0"
-              }`}
+              className={`absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 ${isLoading ? "opacity-100" : "opacity-0"
+                }`}
             >
               <LoadingSVG diameter={24} strokeWidth={4} />
             </div>
@@ -160,7 +155,7 @@ export function Playground({ onConnect }: PlaygroundProps) {
     <>
       <div className="flex grow w-full">
         <div className="flex-col grow basis-1/2 gap-4 h-full md:flex">
-          <Typewriter typingSpeed={50} />
+          <Typewriter typingSpeed={25} />
           {audioTileContent}
         </div>
       </div>

@@ -15,6 +15,7 @@ export function Typewriter({ typingSpeed = 50 }: TypewriterProps) {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   const text = Object.values(transcriptions)
+    .toSorted((a, b) => a.firstReceivedTime - b.firstReceivedTime)
     .map((t) => t.text)
     .join("\n");
 
@@ -36,7 +37,6 @@ export function Typewriter({ typingSpeed = 50 }: TypewriterProps) {
   return (
     <p className="text-lg font-mono">
       <motion.span
-        style={{ whiteSpace: "pre" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
