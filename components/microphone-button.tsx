@@ -46,10 +46,11 @@ export const MicrophoneButton = ({
 
   return (
     <div
-      className={`flex items-center justify-center gap-2 px-2 py-[6px] bg-white rounded text-groq-accent-text hover:text-groq-accent-text-active active:translate-y-[2px] active:scale-[0.99] hover:-translate-y-[2px] transition-all ease-out duration-250 ${isSpaceBarPressed
-        ? "scale-90 border-groq-action-text border"
-        : "scale-100"
-        }`}
+      className={`flex items-center justify-center gap-2 px-2 py-[6px] bg-white rounded text-groq-accent-text hover:text-groq-accent-text-active active:translate-y-[2px] active:scale-[0.99] hover:-translate-y-[2px] transition-all ease-out duration-250 ${
+        isSpaceBarPressed
+          ? "scale-90 border-groq-action-text border"
+          : "scale-100"
+      }`}
     >
       <TrackToggle
         source={Track.Source.Microphone}

@@ -2,10 +2,7 @@
 
 import { useCallback, useMemo } from "react";
 import { Room, RoomEvent, Track, LocalAudioTrack } from "livekit-client";
-import {
-  LiveKitRoom,
-  RoomAudioRenderer,
-} from "@livekit/components-react";
+import { LiveKitRoom, RoomAudioRenderer } from "@livekit/components-react";
 
 import { Playground } from "@/components/playground";
 import { useConnection } from "@/hooks/use-connection";
