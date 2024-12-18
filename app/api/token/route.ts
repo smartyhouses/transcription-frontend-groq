@@ -7,13 +7,11 @@ import { NextResponse } from "next/server";
 
 const API_KEY = process.env.LIVEKIT_API_KEY;
 const API_SECRET = process.env.LIVEKIT_API_SECRET;
-const LIVEKIT_URL = process.env.LIVEKIT_URL;
+const LIVEKIT_URL = process.env.NEXT_PUBLIC_LIVEKIT_URL;
 
 export type ConnectionDetails = {
-	serverUrl: string;
-	roomName: string;
-	participantName: string;
-	participantToken: string;
+	identity: string;
+	accessToken: string;
 };
 
 export async function GET() {
@@ -38,10 +36,8 @@ export async function GET() {
 
 		// Return connection details
 		const data: ConnectionDetails = {
-			serverUrl: LIVEKIT_URL,
-			roomName,
-			participantToken: participantToken,
-			participantName: participantIdentity,
+			identity: participantIdentity,
+			accessToken: participantToken,
 		};
 		return NextResponse.json(data);
 	} catch (error) {
