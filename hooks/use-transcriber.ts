@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import {
+  useConnectionState,
   useMaybeRoomContext,
-  useVoiceAssistant,
 } from "@livekit/components-react";
 import {
+  ConnectionState,
   Participant,
   RoomEvent,
   TrackPublication,
@@ -11,14 +12,14 @@ import {
 } from "livekit-client";
 
 export function useTranscriber() {
-  const { state } = useVoiceAssistant();
+  const state = useConnectionState();
   const room = useMaybeRoomContext();
   const [transcriptions, setTranscriptions] = useState<{
     [id: string]: TranscriptionSegment;
   }>({});
 
   useEffect(() => {
-    if (state === "disconnected") {
+    if (state === ConnectionState.Disconnected) {
       setTranscriptions({});
     }
   }, [state]);

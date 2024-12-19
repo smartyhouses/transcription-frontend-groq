@@ -45,7 +45,7 @@ export function Playground({ onConnect }: PlaygroundProps) {
 
   const audioTileContent = useMemo(() => {
     const isLoading = roomState === ConnectionState.Connecting;
-    const isActive = roomState !== ConnectionState.Disconnected;
+    const isActive = !isLoading && roomState !== ConnectionState.Disconnected;
 
     const conversationToolbar = (
       <div className="fixed z-50 w-full md:absolute left-1/2 bottom-4 md:bottom-auto md:top-1/2 -translate-y-1/2 -translate-x-1/2">
@@ -105,9 +105,8 @@ export function Playground({ onConnect }: PlaygroundProps) {
           <Button
             state="primary"
             size="large"
-            className={`relative w-full text-base text-black ${
-              isLoading ? "pointer-events-none" : ""
-            }`}
+            className={`relative w-full text-base text-black ${isLoading ? "pointer-events-none" : ""
+              }`}
             onClick={() =>
               onConnect(roomState === ConnectionState.Disconnected)
             }
@@ -118,9 +117,8 @@ export function Playground({ onConnect }: PlaygroundProps) {
               Start voice transcription
             </div>
             <div
-              className={`absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 ${
-                isLoading ? "opacity-100" : "opacity-0"
-              }`}
+              className={`absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 ${isLoading ? "opacity-100" : "opacity-0"
+                }`}
             >
               <LoadingSVG diameter={24} strokeWidth={4} />
             </div>

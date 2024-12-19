@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { ConnectionState } from "livekit-client";
 import { useTranscriber } from "@/hooks/use-transcriber";
 
 export interface TypewriterProps {
@@ -23,6 +24,12 @@ export function Typewriter({ typingSpeed = 50 }: TypewriterProps) {
     .join("\n");
 
   useEffect(() => {
+    if (text.length === 0) {
+      setDisplayedText("");
+      setCurrentIndex(0);
+      return;
+    }
+
     if (currentIndex < text.length) {
       if (!isTyping) {
         setIsTyping(true);
@@ -62,12 +69,12 @@ export function Typewriter({ typingSpeed = 50 }: TypewriterProps) {
   return (
     <div className="h-full text-lg font-mono pl-4 relative">
       <div className="pointer-events-none h-1/4 absolute top-0 left-0 w-full bg-gradient-to-b from-groq-accent-bg to-transparent"></div>
-      {state === "disconnected" && (
+      {state === ConnectionState.Disconnected && (
         <div className="text-white/40 h-full items-center pb-16 max-w-md flex">
           <p>{emptyTextIntro}</p>
         </div>
       )}
-      {state !== "disconnected" && (
+      {state !== ConnectionState.Disconnected && (
         <div className="h-1/2 overflow-hidden max-w-md flex items-end">
           <p>
             <motion.span
