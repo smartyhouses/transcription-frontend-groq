@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranscriber } from "@/hooks/use-transcriber";
+import { useConnectionState } from "@livekit/components-react";
 
 export interface TypewriterProps {
   typingSpeed?: number;
@@ -16,6 +17,14 @@ export function Typewriter({ typingSpeed = 50 }: TypewriterProps) {
   const { state, transcriptions } = useTranscriber();
   const [displayedText, setDisplayedText] = useState<string>("");
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const roomState = useConnectionState();
+
+  useEffect(() => {
+    if (roomState === "disconnected") {
+      setDisplayedText("");
+      setCurrentIndex(0);
+    }
+  }, [roomState]);
 
   const text = Object.values(transcriptions)
     .toSorted((a, b) => a.firstReceivedTime - b.firstReceivedTime)
@@ -61,30 +70,30 @@ export function Typewriter({ typingSpeed = 50 }: TypewriterProps) {
 
   return (
     <div className="h-full text-lg font-mono pl-4">
-      {state === "disconnected" && displayedText.length === 0 && (
+      {state === "disconnected" && (
         <div className="text-white/40 h-full items-center pb-16 max-w-md flex">
           <p>{emptyTextIntro}</p>
         </div>
       )}
-      <p className="h-1/2 overflow-hidden flex items-end">
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.2 }}
-        >
-          {displayedText}
-        </motion.span>
-        <AnimatePresence>
-          {state !== "disconnected" && (
+      {state !== "disconnected" && (
+        <p className="h-1/2 overflow-hidden flex items-end max-w-md">
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2 }}
+          >
+            {displayedText}
+          </motion.span>
+          <AnimatePresence>
             <motion.span
               key={isTyping ? "animate" : "static"}
               animate={!isTyping && { opacity: [1, 0, 1] }}
               transition={{ duration: 0.5, delay: 0.2, repeat: Infinity }}
               className="relative top-1 inline-block w-2 h-2 rounded-full bg-white"
             />
-          )}
-        </AnimatePresence>
-      </p>
+          </AnimatePresence>
+        </p>
+      )}
     </div>
   );
 }
