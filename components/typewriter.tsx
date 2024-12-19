@@ -62,7 +62,7 @@ export function Typewriter({ typingSpeed = 50 }: TypewriterProps) {
   return (
     <div className="h-full text-lg font-mono pl-4">
       {state === "disconnected" && displayedText.length === 0 && (
-        <div className="text-black/50 h-full items-center pb-16 max-w-md flex">
+        <div className="text-white/40 h-full items-center pb-16 max-w-md flex">
           <p>{emptyTextIntro}</p>
         </div>
       )}
