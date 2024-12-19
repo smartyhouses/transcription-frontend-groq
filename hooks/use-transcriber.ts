@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import {
+  useConnectionState,
   useMaybeRoomContext,
-  useVoiceAssistant,
 } from "@livekit/components-react";
 import {
+  ConnectionState,
   Participant,
   RoomEvent,
   TrackPublication,
@@ -11,11 +12,17 @@ import {
 } from "livekit-client";
 
 export function useTranscriber() {
-  const { state } = useVoiceAssistant();
+  const state = useConnectionState();
   const room = useMaybeRoomContext();
   const [transcriptions, setTranscriptions] = useState<{
     [id: string]: TranscriptionSegment;
   }>({});
+
+  useEffect(() => {
+    if (state === ConnectionState.Disconnected) {
+      setTranscriptions({});
+    }
+  }, [state]);
 
   useEffect(() => {
     if (!room) {
@@ -25,7 +32,7 @@ export function useTranscriber() {
     const updateTranscriptions = (
       segments: TranscriptionSegment[],
       participant?: Participant,
-      publication?: TrackPublication,
+      publication?: TrackPublication
     ) => {
       void participant;
       void publication;
@@ -43,7 +50,7 @@ export function useTranscriber() {
     return () => {
       room.off(RoomEvent.TranscriptionReceived, updateTranscriptions);
     };
-  }, [room]);
+  }, [room, state]);
 
   return { state, transcriptions };
 }
