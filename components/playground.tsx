@@ -31,16 +31,16 @@ export function Playground({ onConnect }: PlaygroundProps) {
   }, [localParticipant, roomState]);
 
   const localTracks = tracks.filter(
-    ({ participant }) => participant instanceof LocalParticipant,
+    ({ participant }) => participant instanceof LocalParticipant
   );
 
   const localMicTrack = localTracks.find(
-    ({ source }) => source === Track.Source.Microphone,
+    ({ source }) => source === Track.Source.Microphone
   );
 
   const localMultibandVolume = useMultibandTrackVolume(
     localMicTrack?.publication.track,
-    9,
+    9
   );
 
   const audioTileContent = useMemo(() => {
@@ -48,14 +48,9 @@ export function Playground({ onConnect }: PlaygroundProps) {
     const isActive = roomState !== ConnectionState.Disconnected;
 
     const conversationToolbar = (
-      <div
-        className="fixed z-50 md:absolute left-1/2 bottom-4 md:bottom-auto md:top-1/2 -translate-y-1/2 -translate-x-1/2"
-        style={{
-          filter: "drop-shadow(0 8px 10px rgba(0, 0, 0, 0.1))",
-        }}
-      >
+      <div className="fixed z-50 w-full md:absolute left-1/2 bottom-4 md:bottom-auto md:top-1/2 -translate-y-1/2 -translate-x-1/2">
         <motion.div
-          className="flex gap-3"
+          className="flex justify-between gap-3 px-2"
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 25 }}
@@ -70,9 +65,7 @@ export function Playground({ onConnect }: PlaygroundProps) {
             isSpaceBarEnabled={true}
           />
           <Button
-            state="destructive"
             className="flex items-center justify-center px-3 rounded-[4px]"
-            size="medium"
             onClick={() =>
               onConnect(roomState === ConnectionState.Disconnected)
             }
@@ -86,8 +79,8 @@ export function Playground({ onConnect }: PlaygroundProps) {
             >
               <path
                 d="M3.33325 3.3335L12.6666 12.6668M12.6666 3.3335L3.33325 12.6668"
-                stroke="#FF887A"
-                strokeWidth="2"
+                stroke="currentColor"
+                strokeWidth="1.5"
                 strokeLinecap="square"
               />
             </svg>
@@ -97,10 +90,10 @@ export function Playground({ onConnect }: PlaygroundProps) {
     );
 
     const startConversationButton = (
-      <div className="fixed bottom-2 md:bottom-auto md:absolute left-1/2 md:top-1/2 -translate-y-1/2 -translate-x-1/2 w-11/12 md:w-auto text-center">
+      <div className="fixed bottom-2 md:bottom-auto md:absolute md:top-1/2 -translate-y-1/2 md:w-auto text-center">
         <motion.div
           className="flex gap-3"
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}
           transition={{
@@ -112,8 +105,9 @@ export function Playground({ onConnect }: PlaygroundProps) {
           <Button
             state="primary"
             size="large"
-            className={`relative w-full text-base text-black ${isLoading ? "pointer-events-none" : ""
-              }`}
+            className={`relative w-full text-base text-black ${
+              isLoading ? "pointer-events-none" : ""
+            }`}
             onClick={() =>
               onConnect(roomState === ConnectionState.Disconnected)
             }
@@ -121,11 +115,12 @@ export function Playground({ onConnect }: PlaygroundProps) {
             <div
               className={`w-full ${isLoading ? "opacity-0" : "opacity-100"}`}
             >
-              Begin transcription
+              Start voice transcription
             </div>
             <div
-              className={`absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 ${isLoading ? "opacity-100" : "opacity-0"
-                }`}
+              className={`absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 ${
+                isLoading ? "opacity-100" : "opacity-0"
+              }`}
             >
               <LoadingSVG diameter={24} strokeWidth={4} />
             </div>
@@ -135,9 +130,8 @@ export function Playground({ onConnect }: PlaygroundProps) {
     );
 
     const visualizerContent = (
-      <div className="flex flex-col items-center justify-space-between h-full w-full pb-12">
-        <div className="h-full flex items-center"></div>
-        <div className="min-h-20 w-full relative">
+      <div className="flex flex-col justify-space-between h-full w-full">
+        <div className="min-h-12 w-full relative">
           <AnimatePresence>
             {!isActive ? startConversationButton : null}
           </AnimatePresence>
@@ -154,9 +148,11 @@ export function Playground({ onConnect }: PlaygroundProps) {
   return (
     <>
       <div className="flex grow w-full">
-        <div className="flex-col grow basis-1/2 gap-4 h-full md:flex">
+        <div className="relative flex-col grow basis-1/2 gap-4 h-full md:flex">
           <Typewriter typingSpeed={25} />
-          {audioTileContent}
+          <div className="absolute left-0 bottom-0 w-full border-t border-white/20 pt-2">
+            {audioTileContent}
+          </div>
         </div>
       </div>
     </>

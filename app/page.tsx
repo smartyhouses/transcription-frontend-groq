@@ -8,30 +8,33 @@ import { ConnectionProvider } from "@/hooks/use-connection";
 export default function Home() {
   return (
     <ConnectionProvider>
-      <div className="grid grid-rows-[64px_1fr_20px] min-h-screen p-8 pb-20 gap-16 sm:p-20">
-        <header className="flex items-center justify-between">
-          <a href="https://console.groq.io" target="_blank">
-            <Image
-              width={122.667}
-              height={64}
-              src="/images/groq-logomark.svg"
-              alt="Groq logo"
-              className="h-16"
-            />
-          </a>
-          <a href="https://docs.livekit.io/agents" target="_blank">
-            Built with{" "}
-            <Image
-              width={104.667}
-              height={24}
-              src="/images/livekit-logomark.svg"
-              alt="LiveKit logo"
-              className="h-6"
-            />
-          </a>
-        </header>
-        <RoomComponent />
-        <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center"></footer>
+      <div className="flex items-center justify-center min-h-screen h-full w-full">
+        <div className="w-full grid grid-rows-[64px_1fr_20px] lg:border border-white/20 h-full min-h-dvh lg:max-w-5xl mx-auto lg:min-h-[640px] rounded-2xl px-4">
+          <header className="border-b border-white/20">
+            <div className="py-4 px-2 flex items-center justify-between">
+              <a href="https://console.groq.io" target="_blank">
+                <Image
+                  width={122.667}
+                  height={64}
+                  src="/images/groq-logomark.svg"
+                  alt="Groq logo"
+                  className="h-8 w-auto"
+                />
+              </a>
+              <div>
+                Built with{" "}
+                <a
+                  href="https://docs.livekit.io/agents"
+                  className="pb-[1px] border-b border-white/40 hover:border-white/80 transition-all duration-75 ease-out"
+                  target="_blank"
+                >
+                  LiveKit
+                </a>
+              </div>
+            </div>
+          </header>
+          <RoomComponent />
+        </div>
       </div>
     </ConnectionProvider>
   );

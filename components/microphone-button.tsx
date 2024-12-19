@@ -46,10 +46,8 @@ export const MicrophoneButton = ({
 
   return (
     <div
-      className={`flex items-center justify-center gap-2 px-2 py-[6px] bg-white rounded text-groq-accent-text hover:text-groq-accent-text-active active:translate-y-[2px] active:scale-[0.99] hover:-translate-y-[2px] transition-all ease-out duration-250 ${
-        isSpaceBarPressed
-          ? "scale-90 border-groq-action-text border"
-          : "scale-100"
+      className={`flex items-center justify-center gap-2 px-2 py-[6px] bg-transparent rounded text-white border border-white/20 hover:bg-white/10 active:translate-y-[2px] active:scale-[0.99] transition-all ease-out duration-250 ${
+        isSpaceBarPressed ? "scale-90 border-white/20-text border" : "scale-100"
       }`}
     >
       <TrackToggle
@@ -61,16 +59,16 @@ export const MicrophoneButton = ({
         showIcon={false}
       >
         {isMuted ? (
-          <MicOff className="w-4 h-4 text-groq-accent-text" />
+          <MicOff className="w-4 h-4 text-white" />
         ) : (
-          <Mic className="w-4 h-4 text-groq-accent-text" />
+          <Mic className="w-4 h-4 text-white" />
         )}
         <MultibandAudioVisualizer
           state="speaking"
           barWidth={2}
           minBarHeight={2}
           maxBarHeight={16}
-          accentColor={"gray"}
+          accentColor={"white"}
           accentShade={950}
           frequencies={localMultibandVolume}
           borderRadius={5}

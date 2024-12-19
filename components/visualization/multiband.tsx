@@ -28,10 +28,10 @@ export const MultibandAudioVisualizer = ({
   });
 
   const [thinkingIndex, setThinkingIndex] = useState(
-    Math.floor(summedFrequencies.length / 2),
+    Math.floor(summedFrequencies.length / 2)
   );
   const [thinkingDirection, setThinkingDirection] = useState<"left" | "right">(
-    "right",
+    "right"
   );
 
   useEffect(() => {
@@ -73,7 +73,7 @@ export const MultibandAudioVisualizer = ({
 
         return (
           <div
-            className={`bg-groq-control-text ${
+            className={`bg-white ${
               isCenter && state === "listening" ? "animate-pulse" : ""
             }`}
             key={"frequency-" + index}

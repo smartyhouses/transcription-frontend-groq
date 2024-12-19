@@ -1,12 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranscriber } from "@/hooks/use-transcriber";
 
 export interface TypewriterProps {
   typingSpeed?: number;
 }
+
+const emptyText =
+  "Voice transcription will appear after you connect and start talking";
 
 export function Typewriter({ typingSpeed = 50 }: TypewriterProps) {
   const [isTyping, setIsTyping] = useState<boolean>(false);
@@ -34,25 +37,54 @@ export function Typewriter({ typingSpeed = 50 }: TypewriterProps) {
     }
   }, [currentIndex, text, typingSpeed, isTyping]);
 
+  const emptyTextIntro = useMemo(() => {
+    return emptyText.split("").map((word, index) => {
+      return (
+        <motion.span
+          initial={{
+            opacity: 0,
+          }}
+          animate={{
+            opacity: 1,
+          }}
+          transition={{
+            duration: 0.2,
+            delay: index * 0.015,
+          }}
+          key={index}
+        >
+          {word}
+        </motion.span>
+      );
+    });
+  }, []);
+
   return (
-    <p className="text-lg font-mono">
-      <motion.span
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.2 }}
-      >
-        {displayedText}
-      </motion.span>
-      <AnimatePresence>
-        {state !== "disconnected" && (
-          <motion.span
-            key={isTyping ? "animate" : "static"}
-            animate={!isTyping && { opacity: [1, 0, 1] }}
-            transition={{ duration: 0.5, delay: 0.2, repeat: Infinity }}
-            className="relative top-1 inline-block w-[1ch] h-[2ch] bg-white"
-          />
-        )}
-      </AnimatePresence>
-    </p>
+    <div className="h-full text-lg font-mono pl-4">
+      {state === "disconnected" && displayedText.length === 0 && (
+        <div className="text-black/50 h-full items-center pb-16 max-w-md flex">
+          <p>{emptyTextIntro}</p>
+        </div>
+      )}
+      <p className="h-1/2 overflow-hidden flex items-end">
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
+        >
+          {displayedText}
+        </motion.span>
+        <AnimatePresence>
+          {state !== "disconnected" && (
+            <motion.span
+              key={isTyping ? "animate" : "static"}
+              animate={!isTyping && { opacity: [1, 0, 1] }}
+              transition={{ duration: 0.5, delay: 0.2, repeat: Infinity }}
+              className="relative top-1 inline-block w-2 h-2 rounded-full bg-white"
+            />
+          )}
+        </AnimatePresence>
+      </p>
+    </div>
   );
 }
