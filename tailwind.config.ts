@@ -2,7 +2,7 @@ import type { Config } from "tailwindcss";
 import colors from "tailwindcss/colors";
 
 const groq = {
-  "accent-bg": "#F55036",
+  "accent-bg": "rgb(245, 80, 54)",
 };
 
 export default {

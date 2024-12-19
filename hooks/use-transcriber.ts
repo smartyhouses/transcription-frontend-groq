@@ -18,6 +18,12 @@ export function useTranscriber() {
   }>({});
 
   useEffect(() => {
+    if (state === "disconnected") {
+      setTranscriptions({});
+    }
+  }, [state]);
+
+  useEffect(() => {
     if (!room) {
       return;
     }
@@ -25,7 +31,7 @@ export function useTranscriber() {
     const updateTranscriptions = (
       segments: TranscriptionSegment[],
       participant?: Participant,
-      publication?: TrackPublication,
+      publication?: TrackPublication
     ) => {
       void participant;
       void publication;
@@ -43,7 +49,7 @@ export function useTranscriber() {
     return () => {
       room.off(RoomEvent.TranscriptionReceived, updateTranscriptions);
     };
-  }, [room]);
+  }, [room, state]);
 
   return { state, transcriptions };
 }
