@@ -48,6 +48,8 @@ export function Playground({ onConnect }: PlaygroundProps) {
     9
   );
 
+  
+
   const audioTileContent = useMemo(() => {
     const isLoading = roomState === ConnectionState.Connecting;
     const isActive = !isLoading && roomState !== ConnectionState.Disconnected;
