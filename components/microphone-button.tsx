@@ -76,6 +76,7 @@ export const MicrophoneButton = ({
         />
       </TrackToggle>
       <DeviceSelector kind="audioinput" />
+      <DeviceSelector kind="videoinput" />
     </div>
   );
 };
