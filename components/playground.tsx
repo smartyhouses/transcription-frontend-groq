@@ -39,9 +39,9 @@ export function Playground({ onConnect }: PlaygroundProps) {
     ({ source }) => source === Track.Source.Microphone
   );
 
-  const localVideoTrack = localTracks.find(
-    ({ source }) => source === Track.Source.Camera
-  );
+  //const localVideoTrack = localTracks.find(
+  //  ({ source }) => source === Track.Source.Camera
+  //);
 
   const localMultibandVolume = useMultibandTrackVolume(
     localMicTrack?.publication.track,
