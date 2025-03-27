@@ -156,7 +156,7 @@ export function Playground({ onConnect }: PlaygroundProps) {
   return (
     <>
       <div className="relative flex-col grow basis-1/2 gap-4 h-full w-full">
-        <Typewriter typingSpeed={25} />
+        <Typewriter typingSpeed={27} />
         <div className="absolute left-0 bottom-0 w-full bg-groq-accent-bg border-t border-white/20 pt-2">
           {audioTileContent}
         </div>
