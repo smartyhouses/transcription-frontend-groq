@@ -10,7 +10,7 @@ export interface TypewriterProps {
 }
 
 const emptyText =
-  "Агент ответит Вам сразу, как только включите микрофон и заговорите...";
+  "Агент ответит Вам сразу, как только нажмете кнопку Старт... Скажите: 'Портал, что ты видишь' и агент опишет текущий кадр с Вашей камеры.";
 
 export function Typewriter({ typingSpeed = 50 }: TypewriterProps) {
   const [isTyping, setIsTyping] = useState<boolean>(false);

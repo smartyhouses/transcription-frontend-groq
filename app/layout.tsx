@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Transcription Playground",
-  description: "Portal Realtime transcription",
+  title: "Портал Агнет",
+  description: "Мультимодальный агент в режиме реального времени",
 };
 
 export default function RootLayout({
