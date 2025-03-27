@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Портал Агнет",
+  title: "Портал Агент",
   description: "Мультимодальный агент в режиме реального времени",
 };
 
