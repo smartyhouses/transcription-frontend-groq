@@ -5,7 +5,7 @@ import {
   useConnectionState,
   useLocalParticipant,
   useTracks,
-  VideoTrack,
+  //VideoTrack,
 
 } from "@livekit/components-react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -150,7 +150,6 @@ export function Playground({ onConnect }: PlaygroundProps) {
         </div>
       </div>
     );
-
     return visualizerContent;
   }, [localMultibandVolume, localVideoTrack, roomState, onConnect]);
 
