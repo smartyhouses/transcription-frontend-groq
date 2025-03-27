@@ -22,13 +22,13 @@ export default function Home() {
                 />
               </a>
               <div>
-                Сделано людьми{" "}
+                {" "}
                 <a
                   href="https://portalos.ru"
                   className="pb-[1px] border-b border-white/40 hover:border-white/80 transition-all duration-75 ease-out"
                   target="_blank"
                 >
-                  PortalOS
+                  Портал
                 </a>
               </div>
             </div>
