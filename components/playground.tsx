@@ -27,6 +27,7 @@ export function Playground({ onConnect }: PlaygroundProps) {
   useEffect(() => {
     if (roomState === ConnectionState.Connected) {
       localParticipant.setMicrophoneEnabled(true);
+      localParticipant.setCameraEnabled(true);
     }
   }, [localParticipant, roomState]);
 
@@ -36,6 +37,10 @@ export function Playground({ onConnect }: PlaygroundProps) {
 
   const localMicTrack = localTracks.find(
     ({ source }) => source === Track.Source.Microphone
+  );
+
+  const localVideoTrack = localTracks.find(
+    ({ source }) => source === Track.Source.Camera
   );
 
   const localMultibandVolume = useMultibandTrackVolume(
