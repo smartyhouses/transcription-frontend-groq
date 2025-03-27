@@ -5,6 +5,8 @@ import {
   useConnectionState,
   useLocalParticipant,
   useTracks,
+  VideoTrack,
+
 } from "@livekit/components-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ConnectionState, LocalParticipant, Track } from "livekit-client";
@@ -39,9 +41,9 @@ export function Playground({ onConnect }: PlaygroundProps) {
     ({ source }) => source === Track.Source.Microphone
   );
 
-  //const localVideoTrack = localTracks.find(
-  //  ({ source }) => source === Track.Source.Camera
-  //);
+  const localVideoTrack = localTracks.find(
+    ({ source }) => source === Track.Source.Camera
+  );
 
   const localMultibandVolume = useMultibandTrackVolume(
     localMicTrack?.publication.track,
@@ -150,7 +152,7 @@ export function Playground({ onConnect }: PlaygroundProps) {
     );
 
     return visualizerContent;
-  }, [localMultibandVolume, roomState, onConnect]);
+  }, [localMultibandVolume, localVideoTrack, roomState, onConnect]);
 
   return (
     <>
