@@ -10,7 +10,7 @@ export interface TypewriterProps {
 }
 
 const emptyText =
-  "Voice transcription will appear after you connect and start talking";
+  "Агент ответит Вам сразу, как только включите микрофон и заговорите...";
 
 export function Typewriter({ typingSpeed = 50 }: TypewriterProps) {
   const [isTyping, setIsTyping] = useState<boolean>(false);

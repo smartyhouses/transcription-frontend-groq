@@ -115,7 +115,7 @@ export function Playground({ onConnect }: PlaygroundProps) {
             <div
               className={`w-full ${isLoading ? "opacity-0" : "opacity-100"}`}
             >
-              Start voice transcription
+              Старт
             </div>
             <div
               className={`absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 ${
