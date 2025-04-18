@@ -43,4 +43,4 @@ Run the app:
 pnpm dev
 ```
 
-This app requires a transcription agent to communicate with. You can use one of our example agents in [livekit-examples](https://github.com/livekit-examples/), or create your own following one of the [transcription guice](https://docs.livekit.io/agents/voice-agent/transcriptions/#overview).
+This app requires a transcription agent to communicate with. You can use one of our example agents in [livekit-examples](https://github.com/livekit-examples/), or create your own following one of the [transcription guide](https://docs.livekit.io/agents/voice-agent/transcriptions/#overview).
